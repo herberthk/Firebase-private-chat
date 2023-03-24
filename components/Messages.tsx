@@ -7,8 +7,8 @@ import Message from "./Message";
 
 const Messages = () => {
   const [messages, setMessages] = useState<MessageTypes[]>([]);
-  const { chatId,user } = useSelectedUser()
- 
+  const { chatId, user } = useSelectedUser();
+
   // console.log('chatId',chatId)
   // console.log('user', user)
   useEffect(() => {

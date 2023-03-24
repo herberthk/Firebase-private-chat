@@ -5,7 +5,7 @@ module.exports = {
     useJSXTextNode: true,
     ecmaVersion: 2017,
     sourceType: "module",
-    project: './tsconfig.json',
+    project: "./tsconfig.json",
     tsconfigRootDir: __dirname,
   },
   plugins: ["unused-imports", "@typescript-eslint"],

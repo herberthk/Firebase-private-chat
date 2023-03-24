@@ -8,7 +8,6 @@ import {
   useReducer,
 } from "react";
 import { ChatAction, ChatContextTypes, ChatState } from "../interface";
-import { useAuthData } from "./AuthContext";
 
 const INITIAL_STATE: ChatState = {
   chatId: null,
@@ -23,7 +22,6 @@ interface Props {
 }
 
 export const ChatContextProvider: FC<Props> = ({ children }) => {
-
   const chatReducer = (state: ChatState, action?: ChatAction) => {
     switch (action?.type) {
       case "CHANGE_USER":
@@ -31,14 +29,14 @@ export const ChatContextProvider: FC<Props> = ({ children }) => {
           ...state,
           user: action?.payload?.user,
           // chatId: currentUser?.uid + payload.uid,
-         chatId: action?.payload?.chatId
+          chatId: action?.payload?.chatId,
         };
-      case 'RESET':
-        return{
+      case "RESET":
+        return {
           ...state,
           user: {},
           chatId: null,
-        }
+        };
       default:
         return state;
     }
@@ -58,5 +56,4 @@ export const ChatContextProvider: FC<Props> = ({ children }) => {
   );
 };
 
-export const useSelectedUser = () => useContext(ChatContext)
-
+export const useSelectedUser = () => useContext(ChatContext);

@@ -7,13 +7,9 @@ import {
   useState,
 } from "react";
 
-import {
- 
-  onAuthStateChanged,
-
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import nookies from "nookies";
-import { auth} from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 import { AuthContextTypes, UserTypes } from "../interface";
 
 const contextDefaults: AuthContextTypes = {
@@ -28,7 +24,6 @@ interface Props {
 
 export const AuthContextProvider: FC<Props> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<UserTypes | null>(null);
- 
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -39,22 +34,20 @@ export const AuthContextProvider: FC<Props> = ({ children }) => {
           photoURL: user?.photoURL!,
         });
         nookies.destroy(null, "loggedIn");
-        nookies.set(null, "loggedIn", JSON.stringify(true), {path: '/'});
+        nookies.set(null, "loggedIn", JSON.stringify(true), { path: "/" });
       } else {
         setCurrentUser(null);
         nookies.destroy(null, "loggedIn");
-        nookies.set(null, "loggedIn", JSON.stringify(false), {path: '/'});
+        nookies.set(null, "loggedIn", JSON.stringify(false), { path: "/" });
       }
     });
 
     return () => unsub();
-    
   }, [currentUser?.displayName]);
 
-  
   console.log("currentUser", currentUser);
   return (
-    <AuthContext.Provider value={{ currentUser}}>
+    <AuthContext.Provider value={{ currentUser }}>
       {children}
     </AuthContext.Provider>
   );

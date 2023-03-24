@@ -10,10 +10,7 @@ const Sidebar = () => {
     <div className="sidebar">
       <Navbar />
       <Search />
-      {
-        currentUser && <Chats />
-      }
-
+      {currentUser && <Chats />}
     </div>
   );
 };

@@ -4,35 +4,36 @@ import { useAuthData } from "../context/AuthContext";
 import { useSelectedUser } from "../context/ChatContext";
 import TimeAgo from "react-timeago";
 import { MessageTypes } from "../interface";
+import Image from "next/image";
 
-const Message: FC<MessageTypes> = ({ date,text,img,from}) => {
+const Message: FC<MessageTypes> = ({ date, text, img, from }) => {
   const { currentUser } = useAuthData();
-  const { user } = useSelectedUser()
+  const { user } = useSelectedUser();
 
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [text]);
-  
+
   const imgSrc =
     from === currentUser?.uid ? currentUser?.photoURL! : user?.photoURL!;
-  
+
   return (
     <div
       ref={ref}
-      className={classNames(
-        "message",
-        from === currentUser?.uid && "owner"
-      )}
+      className={classNames("message", from === currentUser?.uid && "owner")}
     >
       <div className="messageInfo">
-        <img src={imgSrc} alt={from} /> 
+        <Image src={imgSrc} alt={from} fill />
       </div>
       <div className="messageContent">
         <p>{text}</p>
-        {img && <img src={img} alt="" />}
-        <span> <TimeAgo date={date.toDate()} /></span>
+        {img && <Image src={img} alt="" fill />}
+        <span>
+          {" "}
+          <TimeAgo date={date.toDate()} />
+        </span>
       </div>
     </div>
   );

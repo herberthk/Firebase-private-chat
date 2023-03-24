@@ -16,30 +16,32 @@ import { upperFirst } from "../utill/utils";
 import { useSelectedUser } from "../context/ChatContext";
 import { UserTypes } from "../interface";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 const Search = () => {
   const [username, setUsername] = useState("");
   const [selected, setSelected] = useState(false);
   const [user, setUser] = useState<UserTypes | null>();
-  const { dispatch, chatId } = useSelectedUser()
+  const { dispatch, chatId } = useSelectedUser();
 
   const { currentUser } = useAuthData();
 
   const handleSearch = async () => {
-    if (!username) return
-    setUser(null)
+    if (!username) return;
+    setUser(null);
     const q = query(
       collection(db, "users"),
-      where("displayName", "==", username.toLowerCase()),where("displayName", "!=", currentUser?.displayName?.toLowerCase())
+      where("displayName", "==", username.toLowerCase()),
+      where("displayName", "!=", currentUser?.displayName?.toLowerCase())
     );
-    
+
     try {
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
         toast.error("Sorry, user not found", {
           closeOnClick: true,
           progress: undefined,
-          position:'top-center'
+          position: "top-center",
         });
       }
       querySnapshot.forEach((doc) => {
@@ -48,11 +50,11 @@ const Search = () => {
           displayName: data.displayName,
           photoURL: data.photoURL,
           uid: data.uid,
-        }
-        setUser((user));
+        };
+        setUser(user);
       });
     } catch (err) {
-      console.log('err',err)
+      console.log("err", err);
     }
   };
 
@@ -63,28 +65,31 @@ const Search = () => {
   // const keyPress = debounce(()=>{
   //     console.log('keyPress')
   //   },10000)
-  
 
   const handleSelect = async () => {
-    const combinedId = currentUser?.uid! > user?.uid!
-    ? currentUser?.uid + user?.uid!
-    : user?.uid! + currentUser?.uid;
+    const combinedId =
+      currentUser?.uid! > user?.uid!
+        ? currentUser?.uid + user?.uid!
+        : user?.uid! + currentUser?.uid;
 
-    dispatch({ type: "CHANGE_USER", payload: {
-      chatId: combinedId,
-      user: user!
-    } });
+    dispatch({
+      type: "CHANGE_USER",
+      payload: {
+        chatId: combinedId,
+        user: user!,
+      },
+    });
 
-    console.log('Selected user', user)
-      setUser(null);
-      setUsername("");
-    // 
+    // console.log("Selected user", user);
+    setUser(null);
+    setUsername("");
+    //
     // check whether the group(chats in firestore) exists, if not create
-    
+
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
-      
-      setSelected(true)
+
+      setSelected(true);
 
       if (!res.exists()) {
         //create a chat in chats collection
@@ -116,7 +121,7 @@ const Search = () => {
       setUser(null);
       setUsername("");
     }
-  }
+  };
 
   return (
     <div className="search">
@@ -125,7 +130,6 @@ const Search = () => {
           type="text"
           placeholder="Find a user"
           onKeyDown={handleKey}
-        
           // onKeyUp={keyPress}
           onChange={(e) => setUsername(e.target.value)}
           value={username}
@@ -139,7 +143,7 @@ const Search = () => {
           onClick={handleSelect}
           onKeyDown={() => {}}
         >
-          <img src={user.photoURL} alt="" />
+          <Image fill src={user.photoURL!} alt="" />
           <div className="userChatInfo">
             <span>{upperFirst(user?.displayName)}</span>
           </div>

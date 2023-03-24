@@ -3,26 +3,23 @@ import Messages from "./Messages";
 import Input from "./Input";
 import { useSelectedUser } from "../context/ChatContext";
 import { upperFirst } from "../utill/utils";
+import Image from "next/image";
 
 const Chat = () => {
-  const { user,chatId } = useSelectedUser()
+  const { user, chatId } = useSelectedUser();
 
   return (
     <div className="chat">
       <div className="chatInfo">
-        <span>
-           {user?.displayName && upperFirst(user?.displayName!)}
-          </span>
+        <span>{user?.displayName && upperFirst(user?.displayName!)}</span>
         <div className="chatIcons">
-          <img src="/img/cam.png" alt="" />
-          <img src="/img/add.png" alt="" />
-          <img src="/img/more.png" alt="" />
+          <Image src="/img/cam.png" alt="" fill />
+          <Image src="/img/add.png" alt="" fill />
+          <Image src="/img/more.png" alt="" fill />
         </div>
       </div>
-      {
-        chatId? <Messages /> : <div className="messages" />
-      }
-      
+      {chatId ? <Messages /> : <div className="messages" />}
+
       <Input />
     </div>
   );
